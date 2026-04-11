@@ -3,27 +3,25 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>هوست تعديل - النسخة التجريبية</title>
+    <title>هوست إسحاق بن يحي - النسخة الاحترافية</title>
     <style>
         body {
-            background-image: url('host pbb.png');
+            /* تصحيح مسار الخلفية وإضافة لون احتياطي */
+            background: #000c1f url('host pbb.png') no-repeat center center fixed;
             background-size: cover;
-            background-position: center;
-            background-attachment: fixed;
-            background-color: #000c1f;
             color: white;
             font-family: 'Segoe UI', Tahoma, sans-serif;
             margin: 0;
             display: flex;
-            flex-direction: column;
             align-items: center;
             justify-content: center;
             height: 100vh;
             overflow: hidden;
         }
 
+        /* الطبقة الشفافة فوق الخلفية لزيادة الوضوح */
         .overlay {
-            background: rgba(0, 0, 0, 0.5);
+            background: rgba(0, 0, 0, 0.6);
             position: absolute;
             top: 0; left: 0; width: 100%; height: 100%;
             z-index: 1;
@@ -33,30 +31,33 @@
             position: relative;
             z-index: 2;
             text-align: center;
-            padding: 30px;
-            border-radius: 20px;
+            padding: 40px;
+            border-radius: 25px;
             background: rgba(255, 255, 255, 0.1);
-            backdrop-filter: blur(10px);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
             border: 1px solid rgba(255, 255, 255, 0.2);
-            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.8);
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.7);
+            width: 85%;
+            max-width: 450px;
         }
 
         h1 {
-            font-size: 2.2em;
-            margin-bottom: 25px;
+            font-size: 2.5em;
+            margin-bottom: 30px;
             color: #00c6ff;
-            text-shadow: 2px 2px 10px rgba(0, 198, 255, 0.5);
+            text-shadow: 0 0 20px rgba(0, 198, 255, 0.6);
         }
 
         .btn-group {
             display: flex;
-            gap: 15px;
             flex-direction: column;
+            gap: 15px;
         }
 
         .btn {
-            padding: 12px 35px;
-            font-size: 18px;
+            padding: 15px 30px;
+            font-size: 19px;
             font-weight: bold;
             color: white;
             background: linear-gradient(45deg, #004e92, #00c6ff);
@@ -65,71 +66,59 @@
             cursor: pointer;
             transition: 0.3s;
             text-decoration: none;
-            text-align: center;
+            display: block;
         }
 
-        .btn:hover { transform: scale(1.05); box-shadow: 0 0 15px #00c6ff; }
+        .btn:hover {
+            transform: scale(1.03);
+            box-shadow: 0 0 20px #00c6ff;
+        }
 
         .btn-info {
-            background: linear-gradient(45deg, #1d1d1d, #444);
+            background: linear-gradient(45deg, #222, #444);
             margin-top: 10px;
+            font-size: 16px;
         }
 
+        /* تنسيق النافذة المنبثقة */
         .modal {
             display: none;
             position: fixed;
             z-index: 1000;
             left: 0; top: 0; width: 100%; height: 100%;
-            background-color: rgba(0,0,0,0.8);
+            background-color: rgba(0,0,0,0.85);
         }
 
         .modal-content {
             background: #001a33;
             margin: 15% auto;
-            padding: 20px;
+            padding: 25px;
             border: 2px solid #00c6ff;
-            width: 300px;
-            border-radius: 15px;
+            width: 320px;
+            border-radius: 20px;
             text-align: center;
             position: relative;
-            animation: fadeIn 0.4s;
+            animation: slideDown 0.4s;
         }
 
-        @keyframes fadeIn { from {opacity: 0; transform: translateY(-20px);} to {opacity: 1; transform: translateY(0);} }
+        @keyframes slideDown { from {opacity: 0; transform: translateY(-50px);} to {opacity: 1; transform: translateY(0);} }
 
-        .close {
-            position: absolute;
-            left: 15px; top: 10px;
-            color: #ff4444;
-            font-size: 24px;
-            cursor: pointer;
+        .close { position: absolute; left: 15px; top: 10px; color: #ff4444; font-size: 28px; cursor: pointer; }
+
+        #cache-status {
+            margin-top: 25px;
+            font-size: 15px;
+            color: #00ffcc;
+            font-weight: bold;
+            min-height: 20px;
         }
-
-        .info-text { line-height: 1.8; font-size: 18px; }
-        .info-text span { color: #00c6ff; font-weight: bold; }
-
-        #cache-status { margin-top: 20px; font-size: 14px; color: #00ffcc; font-weight: bold; }
 
         .version-tag {
             position: fixed;
-            bottom: 15px; right: 20px;
-            font-size: 13px; color: rgba(255, 255, 255, 0.6);
+            bottom: 15px; left: 15px;
+            font-size: 12px; color: rgba(255,255,255,0.5);
             z-index: 10;
-            background: rgba(0,0,0,0.4);
-            padding: 5px 12px;
-            border-radius: 20px;
         }
-
-        .beta-dot {
-            height: 8px; width: 8px;
-            background-color: #ffcc00;
-            border-radius: 50%;
-            display: inline-block;
-            margin-left: 5px;
-            animation: blink 1.5s infinite;
-        }
-
-        @keyframes blink { 0% {opacity: 1;} 50% {opacity: 0.3;} 100% {opacity: 1;} }
     </style>
 </head>
 <body>
@@ -137,83 +126,61 @@
     <div class="overlay"></div>
 
     <div class="container">
-        <h1>هوست الجولد هين</h1>
+        <h1>إسحاق هوست 🇩🇿</h1>
         
         <div class="btn-group">
-            <a href="672/index.html" class="btn">تفعيل نظام 6.72</a>
-            <a href="900/index.html" class="btn">تفعيل نظام 9.00</a>
-            <button onclick="showInfo()" class="btn btn-info">صنع من قبل</button>
+            <a href="672/index.html" class="btn">تعديل نظام 6.72</a>
+            <a href="900/index.html" class="btn">تعديل نظام 9.00</a>
+            <button onclick="showInfo()" class="btn btn-info">معلومات المطور</button>
         </div>
 
-        <div id="cache-status">جاري التحقق من التخزين المؤقت...</div>
+        <div id="cache-status">جاري التحقق من التحديثات...</div>
     </div>
 
     <div id="infoModal" class="modal">
         <div class="modal-content">
             <span class="close" onclick="closeInfo()">&times;</span>
-            <h2 style="color:#00c6ff">معلومات المطور</h2>
-            <div class="info-text">
-                <p>الاسم: <span>إسحاق بن يحي</span></p>
-                <p>العمر: <span>11 سنة</span></p>
-                <p>البلد: <span>الجزائر 🇩🇿</span></p>
-            </div>
+            <h2 style="color:#00c6ff">عن المطور</h2>
+            <p>الاسم: <b>إسحاق بن يحي</b></p>
+            <p>العمر: <b>11 سنة</b></p>
+            <p>البلد: <b>الجزائر 🇩🇿</b></p>
+            <p style="font-size: 12px; color: #888;">مبرمج هوستات PS4 واعد</p>
         </div>
     </div>
 
-    <div class="version-tag">
-        <span class="beta-dot"></span>
-        BETA v1.0 - هذه النسخة تجريبية
-    </div>
+    <div class="version-tag">BETA v1.1 - Ishak Host</div>
 
     <script>
-        // وظائف النافذة المنبثقة
+        // وظائف النافذة
         function showInfo() { document.getElementById('infoModal').style.display = "block"; }
         function closeInfo() { document.getElementById('infoModal').style.display = "none"; }
-        
-        window.onclick = function(event) {
-            var modal = document.getElementById('infoModal');
-            if (event.target == modal) { modal.style.display = "none"; }
-        }
+        window.onclick = function(e) { if (e.target.className == 'modal') closeInfo(); }
 
-        // --- كود الـ Cache المطور لإظهار النسبة المئوية ---
+        // كود الـ Cache المطور
         var statusDisp = document.getElementById('cache-status');
         var appCache = window.applicationCache;
 
-        appCache.addEventListener('checking', function() {
-            statusDisp.innerHTML = "جاري التحقق من الملفات...";
-        }, false);
-
-        appCache.addEventListener('downloading', function() {
-            statusDisp.innerHTML = "بدأ تحميل الهوست للاستخدام بدون إنترنت...";
-        }, false);
-
         appCache.addEventListener('progress', function(e) {
             var percent = Math.round((e.loaded / e.total) * 100);
-            statusDisp.innerHTML = "جاري الحفظ المكتوم: " + percent + "% ⏳";
-            statusDisp.style.color = "#ffcc00"; 
+            statusDisp.innerHTML = "جاري الحفظ للاستخدام بدون نت: " + percent + "% ⏳";
         }, false);
 
         appCache.addEventListener('cached', function() {
-            statusDisp.innerHTML = "تم حفظ الهوست بالكامل! يمكنك فصل الإنترنت الآن ✅";
-            statusDisp.style.color = "#39FF14"; 
+            statusDisp.innerHTML = "تم الحفظ بنجاح! يمكنك فصل النت ✅";
         }, false);
 
         appCache.addEventListener('noupdate', function() {
-            statusDisp.innerHTML = "نسخة الهوست محدثة وجاهزة للعمل بدون إنترنت ✅";
-            statusDisp.style.color = "#39FF14";
+            statusDisp.innerHTML = "الهوست جاهز ومحدث (Offline) ✅";
         }, false);
 
         appCache.addEventListener('updateready', function() {
             appCache.swapCache();
-            statusDisp.innerHTML = "تم تحميل تحديثات جديدة، جاري إعادة التشغيل...";
             location.reload();
         }, false);
 
         appCache.addEventListener('error', function() {
-            statusDisp.innerHTML = "تنبيه: افتح الإنترنت مرة واحدة فقط لتفعيل خاصية الـ Offline.";
-            statusDisp.style.color = "#ff4444";
+            statusDisp.innerHTML = "جاهز للعمل";
         }, false);
     </script>
-
 </body>
 </html>
