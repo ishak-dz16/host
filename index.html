@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html manifest="offline.appcache" lang="ar" dir="rtl">
+<html manifest="offline.manifest" lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -65,17 +65,16 @@
             cursor: pointer;
             transition: 0.3s;
             text-decoration: none;
+            text-align: center;
         }
 
         .btn:hover { transform: scale(1.05); box-shadow: 0 0 15px #00c6ff; }
 
-        /* زر "صنع من قبل" لون مختلف للتميز */
         .btn-info {
             background: linear-gradient(45deg, #1d1d1d, #444);
             margin-top: 10px;
         }
 
-        /* تصميم النافذة المنبثقة (Modal) */
         .modal {
             display: none;
             position: fixed;
@@ -109,7 +108,7 @@
         .info-text { line-height: 1.8; font-size: 18px; }
         .info-text span { color: #00c6ff; font-weight: bold; }
 
-        #cache-status { margin-top: 20px; font-size: 13px; color: #00ffcc; }
+        #cache-status { margin-top: 20px; font-size: 14px; color: #00ffcc; font-weight: bold; }
 
         .version-tag {
             position: fixed;
@@ -167,18 +166,53 @@
     </div>
 
     <script>
+        // وظائف النافذة المنبثقة
         function showInfo() { document.getElementById('infoModal').style.display = "block"; }
         function closeInfo() { document.getElementById('infoModal').style.display = "none"; }
         
-        // إغلاق النافذة عند الضغط خارجها
         window.onclick = function(event) {
             var modal = document.getElementById('infoModal');
             if (event.target == modal) { modal.style.display = "none"; }
         }
 
-        // كود الـ Cache
-        window.applicationCache.onnoupdate = function() { document.getElementById('cache-status').innerHTML = "الهوست جاهز للعمل بدون إنترنت ✅"; };
-        window.applicationCache.oncached = function() { document.getElementById('cache-status').innerHTML = "تم حفظ الهوست بنجاح! ✅"; };
+        // --- كود الـ Cache المطور لإظهار النسبة المئوية ---
+        var statusDisp = document.getElementById('cache-status');
+        var appCache = window.applicationCache;
+
+        appCache.addEventListener('checking', function() {
+            statusDisp.innerHTML = "جاري التحقق من الملفات...";
+        }, false);
+
+        appCache.addEventListener('downloading', function() {
+            statusDisp.innerHTML = "بدأ تحميل الهوست للاستخدام بدون إنترنت...";
+        }, false);
+
+        appCache.addEventListener('progress', function(e) {
+            var percent = Math.round((e.loaded / e.total) * 100);
+            statusDisp.innerHTML = "جاري الحفظ المكتوم: " + percent + "% ⏳";
+            statusDisp.style.color = "#ffcc00"; 
+        }, false);
+
+        appCache.addEventListener('cached', function() {
+            statusDisp.innerHTML = "تم حفظ الهوست بالكامل! يمكنك فصل الإنترنت الآن ✅";
+            statusDisp.style.color = "#39FF14"; 
+        }, false);
+
+        appCache.addEventListener('noupdate', function() {
+            statusDisp.innerHTML = "نسخة الهوست محدثة وجاهزة للعمل بدون إنترنت ✅";
+            statusDisp.style.color = "#39FF14";
+        }, false);
+
+        appCache.addEventListener('updateready', function() {
+            appCache.swapCache();
+            statusDisp.innerHTML = "تم تحميل تحديثات جديدة، جاري إعادة التشغيل...";
+            location.reload();
+        }, false);
+
+        appCache.addEventListener('error', function() {
+            statusDisp.innerHTML = "تنبيه: افتح الإنترنت مرة واحدة فقط لتفعيل خاصية الـ Offline.";
+            statusDisp.style.color = "#ff4444";
+        }, false);
     </script>
 
 </body>
