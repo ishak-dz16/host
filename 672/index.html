@@ -2,74 +2,95 @@
 <html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
-    <title>تعديلة GoldHEN 6.72</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>إسحاق هوست 6.72 - النسخة الكاملة</title>
+    
     <style>
         body {
-            background: #000c1f; /* لون داكن متناسق مع صورتك */
+            background: linear-gradient(135deg, #001f3f, #000000);
             color: white;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             text-align: center;
-            font-family: 'Segoe UI', Tahoma, sans-serif;
+            padding-top: 50px;
             margin: 0;
-            padding: 50px 20px;
+            overflow: hidden;
         }
-
-        .loader {
-            border: 5px solid #1a1a1a;
-            border-top: 5px solid #00c6ff;
-            border-radius: 50%;
-            width: 60px;
-            height: 60px;
-            animation: spin 1s linear infinite;
-            display: inline-block;
-            margin-bottom: 20px;
-        }
-
-        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
-
-        h1 { color: #00c6ff; font-size: 24px; }
+        h1 { color: #3498db; text-shadow: 2px 2px #000; }
         .status-box {
-            background: rgba(255, 255, 255, 0.05);
-            padding: 20px;
+            background: rgba(255, 255, 255, 0.1);
+            border: 2px solid #3498db;
             border-radius: 15px;
-            border: 1px solid rgba(0, 198, 255, 0.3);
             display: inline-block;
+            padding: 30px;
+            margin-top: 20px;
             min-width: 300px;
         }
-
-        #status { font-size: 18px; color: #aaa; }
-        .version { font-size: 12px; color: #555; margin-top: 20px; }
-    </style>
-</head>
-<body onload="setTimeout(startGolden, 500)">
-
-    <div class="loader"></div>
-    <div class="status-box">
-        <h1>نظام 6.72</h1>
-        <div id="status">جاري تحضير ملفات الثغرة...</div>
-    </div>
-    
-    <div class="version">مدعوم بـ GoldHEN v2.4b18.9</div>
-
-    <script src="int64.js"></script>
-    <script src="exploits.js"></script>
-    <script src="mira.js"></script> <script>
-        function startGolden() {
-            document.getElementById('status').innerHTML = "جاري استغلال الثغرة يا يماك (Kernel Exploit)...";
-            document.getElementById('status').style.color = "#ffcc00";
-
-            // هذا الجزء يعتمد على الوظائف الموجودة داخل exploits.js
-            // إذا نجحت الثغرة سيقوم الملف تلقائياً بتشغيل mira.js (GoldHEN)
-            
-            setTimeout(function() {
-                if(window.main_ret == 0) {
-                    document.getElementById('status').innerHTML = "تم الاختراق بنجاح! <br> انتظر شعار GoldHEN الآن.";
-                    document.getElementById('status').style.color = "#00ff00";
-                } else {
-                    document.getElementById('status').innerHTML = "فشل في المحاولة.. أعد تحميل الصفحة.";
-                    document.getElementById('status').style.color = "#ff4444";
-                }
-            }, 2000);
+        #progress {
+            font-size: 22px;
+            font-weight: bold;
+            color: #39FF14;
+            margin-bottom: 20px;
         }
+        .loader {
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #3498db;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            display: inline-block;
+        }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+        .footer { margin-top: 50px; color: #888; font-size: 14px; }
+    </style>
+
+    <script src="common.js"></script>
+    <script src="int64.js"></script>
+    <script src="exploit.js"></script>
+    <script src="mira.js"></script>
+
+</head>
+<body>
+
+    <h1>إسحاق هوست 🇩🇿</h1>
+    <p>نظام البلايستيشن 4 - إصدار 6.72</p>
+
+    <div class="status-box">
+        <div id="progress">جاري بدء الثغرة...</div>
+        <div class="loader" id="loader"></div>
+    </div>
+
+    <div class="footer">
+        بواسطة: إسحاق بن يحي <br>
+        2026 © جميع الحقوق محفوظة
+    </div>
+
+    <script>
+        // دالة يتم استدعاؤها تلقائياً عند تحميل الصفحة
+        window.onload = function() {
+            // ننتظر قليلاً لضمان تحميل جميع الملفات
+            setTimeout(function() {
+                if (typeof version !== 'undefined') {
+                    document.getElementById("progress").innerHTML = "جاري تحميل الـ Kernel Exploit...";
+                } else {
+                    // إذا لم يجد ملفات JS سيعطي هذا التنبيه
+                    document.getElementById("progress").innerHTML = "انتظر... يتم فحص الملفات";
+                }
+            }, 1000);
+        };
+
+        // هذه الوظيفة يناديها ملف exploit.js عند النجاح
+        function jb_finished() {
+            document.getElementById("progress").innerHTML = "تم تفعيل الثغرة بنجاح! ✅";
+            document.getElementById("loader").style.display = "none";
+            alert("بصحتك يا إسحاق! الثغرة اشتغلت 100%");
+        }
+
+        // في حال حدوث خطأ
+        window.onerror = function(msg) {
+            document.getElementById("progress").innerHTML = "حالة: " + msg;
+            document.getElementById("progress").style.color = "red";
+        };
     </script>
 
 </body>
