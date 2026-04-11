@@ -1,0 +1,22 @@
+CACHE MANIFEST
+# v2.0 - 2026-04-10
+
+CACHE:
+index.html
+host_pbb.jpg
+offline.appcache
+
+# ملفات ثغرة 6.72
+672/index.html
+672/mira.js
+672/exploit.js
+
+# ملفات ثغرة 9.00
+900/index.html
+900/goldhen.bin
+900/kexploit.js
+900/rop.js
+900/int64.js
+
+NETWORK:
+*
