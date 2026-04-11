@@ -1,11 +1,12 @@
 CACHE MANIFEST 
 
-# v1.1 - Ishak Multi-Host
-# هذا الملف سيقوم بتخزين كل شيء
+# v1.2 - Ishak Host Multi-Version
+# هذا الملف يسمح للبلايستيشن بحفظ الموقع بالكامل
 
 CACHE:
-# الصفحة الرئيسية
+# الصفحة الرئيسية وصورتها
 index.html
+host pbb.png
 
 # ملفات إصدار 6.72
 672/index.html
@@ -14,7 +15,7 @@ index.html
 672/exploit.js
 672/goldhen.bin
 
-# ملفات إصدار 9.00 (تأكد من وجودها بنفس الأسماء)
+# ملفات إصدار 9.00
 900/index.html
 900/webkit.js
 900/kexploit.js
