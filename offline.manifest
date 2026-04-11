@@ -1,0 +1,25 @@
+CACHE MANIFEST 
+
+# v1.1 - Ishak Multi-Host
+# هذا الملف سيقوم بتخزين كل شيء
+
+CACHE:
+# الصفحة الرئيسية
+index.html
+
+# ملفات إصدار 6.72
+672/index.html
+672/common.js
+672/int64.js
+672/exploit.js
+672/goldhen.bin
+
+# ملفات إصدار 9.00 (تأكد من وجودها بنفس الأسماء)
+900/index.html
+900/webkit.js
+900/kexploit.js
+900/int64.js
+900/goldhen.bin
+
+NETWORK:
+*
