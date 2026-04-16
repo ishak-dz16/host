@@ -3,122 +3,118 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>إسحاق هوست - تعديلة 6.72 (النسخة الحمراء)</title>
+    <title>إسحاق هوست - إصدار 6.72</title>
     <style>
-        body {
-            background-color: #0d0000; /* أسود مائل للأحمر الداكن */
-            color: white;
-            font-family: 'Segoe UI', Tahoma, sans-serif;
-            margin: 0;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            height: 100vh;
+        body { 
+            background-color: #0d0000; 
+            color: white; 
+            font-family: 'Segoe UI', Tahoma, sans-serif; 
+            text-align: center; 
+            display: flex; 
+            flex-direction: column; 
+            align-items: center; 
+            justify-content: center; 
+            height: 100vh; 
+            margin: 0; 
         }
-
-        .container {
-            text-align: center;
-            padding: 30px;
-            border-radius: 20px;
-            background: rgba(255, 0, 0, 0.05); /* لمحة حمراء خلفية */
-            border: 1px solid #ff0000; /* إطار أحمر */
-            box-shadow: 0 0 25px rgba(255, 0, 0, 0.3); /* توهج أحمر */
-            width: 90%;
-            max-width: 400px;
+        .container { 
+            padding: 30px; 
+            border-radius: 20px; 
+            background: rgba(255, 0, 0, 0.02);
+            border: 1px solid #ff0000; 
+            box-shadow: 0 0 25px rgba(255, 0, 0, 0.4); 
+            width: 85%; 
+            max-width: 400px; 
         }
-
         h1 { 
             color: #ff0000; 
-            margin-bottom: 10px; 
-            text-shadow: 0 0 10px rgba(255, 0, 0, 0.5);
+            text-shadow: 0 0 15px #ff0000; 
+            margin-bottom: 5px;
         }
-        
-        p { color: #ffcccc; font-size: 14px; margin-bottom: 25px; }
-
-        .btn-group { display: flex; flex-direction: column; gap: 15px; }
-
-        .btn {
-            padding: 12px;
-            font-size: 17px;
-            font-weight: bold;
-            color: white;
-            /* تدرج أحمر ناري */
-            background: linear-gradient(45deg, #800000, #ff0000);
-            border: none;
-            border-radius: 10px;
-            cursor: pointer;
+        p { color: #ffcccc; font-size: 14px; margin-bottom: 20px; }
+        .btn { 
+            display: block; 
+            width: 100%; 
+            padding: 14px; 
+            margin: 10px 0; 
+            background: linear-gradient(45deg, #800000, #ff0000); 
+            border: none; 
+            color: white; 
+            border-radius: 12px; 
+            cursor: pointer; 
+            font-weight: bold; 
+            font-size: 16px;
             transition: 0.3s;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
         }
-
         .btn:hover { 
             transform: scale(1.05); 
-            filter: brightness(1.2);
+            filter: brightness(1.2); 
             box-shadow: 0 0 15px #ff0000;
         }
-
-        #status {
-            margin-top: 25px;
-            font-size: 16px;
-            font-weight: bold;
-            color: #ff4d4d; /* أحمر فاتح للحالة */
+        #status { 
+            margin-top: 20px; 
+            font-weight: bold; 
+            color: #ffcc00; 
+            min-height: 24px;
         }
-
-        .back-link {
-            margin-top: 20px;
-            color: #666;
-            text-decoration: none;
-            font-size: 13px;
+        .back-link { 
+            color: #666; 
+            text-decoration: none; 
+            font-size: 13px; 
+            margin-top: 20px; 
+            display: block; 
             transition: 0.3s;
         }
-        
         .back-link:hover { color: #ff0000; }
     </style>
-
-    <script src="./int64.js"></script>
-    <script src="./common.js"></script>
-    <script src="./exploit.js"></script>
+    
+    <script src="int64.js"></script>
+    <script src="common.js"></script>
+    <script src="exploit.js"></script>
 </head>
 <body>
 
     <div class="container">
-        <h1>إسحاق هوست ❤️</h1>
-        <p>نظام 6.72 - اختر نسخة GoldHEN</p>
+        <h1>إسحاق هوست 🔥</h1>
+        <p>نظام 6.72 - النسخة الحمراء</p>
 
-        <div class="btn-group">
-            <button class="btn" onclick="loadGoldHen('goldhen_2.3.bin')">GoldHEN v2.3</button>
-            <button class="btn" onclick="loadGoldHen('goldhen_2.4b14.bin')">GoldHEN v2.4b14</button>
-            <button class="btn" onclick="loadGoldHen('goldhen_2.1.2.bin')">GoldHEN v2.1.2</button>
-        </div>
+        <div id="status">جاهز.. اختر الإصدار لبدء الثغرة</div>
 
-        <div id="status">جاري فحص الملفات...</div>
-
+        <button class="btn" onclick="startExploit('goldhen_2.1.2.bin')">GoldHEN v2.1.2</button>
+        <button class="btn" onclick="startExploit('goldhen_2.3.bin')">GoldHEN v2.3</button>
+        <button class="btn" onclick="startExploit('goldhen_2.4b14.bin')">GoldHEN v2.4b14</button>
+        
         <a href="../index.html" class="back-link">العودة للقائمة الرئيسية</a>
     </div>
 
     <script>
-        window.onload = function() {
-            document.getElementById('status').innerHTML = "جاهز للإرسال (RED EDITION)";
-            document.getElementById('status').style.color = "#ff4d4d";
-        };
+        var selectedPayload = "";
 
-        function loadGoldHen(fileName) {
-            document.getElementById('status').innerHTML = "جاري الاختراق.. إرسال " + fileName;
-            document.getElementById('status').style.color = "#ffffff";
-
-            setTimeout(function() {
-                try {
-                    runExploit(fileName); 
-                } catch (e) {
-                    document.getElementById('status').innerHTML = "فشل الإرسال.. تأكد من ملفاتك";
-                    document.getElementById('status').style.color = "#ff0000";
-                }
-            }, 500);
+        function startExploit(payload) {
+            selectedPayload = payload;
+            document.getElementById('status').innerHTML = "جاري تشغيل الثغرة (Spray)... انتظر ⏳";
+            document.getElementById('status').style.color = "#ffcc00";
+            
+            try {
+                // استدعاء الوظيفة الموجودة في ملفك exploit.js
+                spray_one(); 
+                
+                // انتظار وهمي للتفاعل مع المستخدم حتى تنتهي الثغرة
+                setTimeout(function(){
+                    if(document.getElementById('status').innerHTML.indexOf("فشل") == -1) {
+                        document.getElementById('status').innerHTML = "تم الاختراق! جاري إرسال " + selectedPayload;
+                        document.getElementById('status').style.color = "#00ffcc";
+                    }
+                }, 2500);
+                
+            } catch(e) {
+                document.getElementById('status').innerHTML = "خطأ في ملف exploit.js: " + e.message;
+                document.getElementById('status').style.color = "#ff0000";
+            }
         }
 
+        // منع المتصفح من إظهار أخطاء JavaScript المزعجة
         window.onerror = function() { return true; };
     </script>
-
 </body>
 </html>
