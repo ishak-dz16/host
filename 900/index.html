@@ -2,78 +2,100 @@
 <html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
-    <title>إسحاق هوست - اختيار نسخة GoldHen</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>إسحاق هوست - نظام 9.00 (No-USB) - الثيم الأحمر</title>
     <style>
         body {
-            background: #000c1f;
-            color: white;
+            /* خلفية سوداء مائلة للاحمرار مع تدرج شعاعي */
+            background: radial-gradient(circle, #2a0000 0%, #000000 100%);
+            color: #eeeeee;
             font-family: 'Segoe UI', Tahoma, sans-serif;
             text-align: center;
-            padding-top: 50px;
+            margin: 0;
+            padding-top: 40px;
         }
-        h1 { color: #00c6ff; text-shadow: 0 0 15px rgba(0,198,255,0.5); }
-        
+
+        h1 {
+            color: #ff3333; /* عنوان أحمر ناصع */
+            text-shadow: 0 0 15px rgba(255, 51, 51, 0.6);
+        }
+
+        .sub-text {
+            color: #aaaaaa;
+            margin-bottom: 25px;
+        }
+
         .btn-group {
             display: flex;
             flex-direction: column;
             align-items: center;
             gap: 15px;
-            margin-top: 30px;
         }
 
         .btn {
-            width: 80%;
-            max-width: 350px;
+            width: 85%;
+            max-width: 400px;
             padding: 15px;
             font-size: 18px;
             font-weight: bold;
             color: white;
-            background: linear-gradient(45deg, #004e92, #00c6ff);
+            /* تدرج أحمر للأزرار العادية */
+            background: linear-gradient(45deg, #a80000, #ff4d4d);
             border: none;
             border-radius: 15px;
             cursor: pointer;
-            transition: 0.3s;
+            transition: 0.3s ease-in-out;
+            box-shadow: 0 4px 15px rgba(255, 0, 0, 0.2);
         }
 
         .btn:hover {
-            transform: scale(1.05);
-            box-shadow: 0 0 20px #00c6ff;
+            transform: scale(1.03);
+            background: linear-gradient(45deg, #ff4d4d, #a80000);
+            box-shadow: 0 0 20px rgba(255, 51, 51, 0.8);
         }
 
-        .btn-gold {
-            background: linear-gradient(45deg, #d4145a, #fbb03b);
+        /* تمييز الزر الأحدث بتدرج مختلف قليلاً */
+        .btn-latest {
+            background: linear-gradient(45deg, #d32f2f, #ffca28); /* أحمر مع ذهبي للتمييز */
+            color: #000; /* نص أسود لسهولة القراءة */
+        }
+        
+        .btn-latest:hover {
+            background: linear-gradient(45deg, #ffca28, #d32f2f);
+            box-shadow: 0 0 20px rgba(255, 202, 40, 0.8);
         }
 
+        /* حالة التحميل - لودر أحمر */
+        #loader-container { display: none; margin-top: 30px; }
         .loader {
-            display: none;
-            border: 6px solid #f3f3f3;
-            border-top: 6px solid #ffcc00;
+            border: 6px solid #440000; /* حدود داكنة */
+            border-top: 6px solid #ff3333; /* الجزء العلوي أحمر ناصع */
             border-radius: 50%;
-            width: 50px;
-            height: 50px;
+            width: 60px; height: 60px;
             animation: spin 1s linear infinite;
-            margin: 20px auto;
+            margin: 0 auto 20px;
         }
-
         @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
         
-        #status { color: #ffcc00; font-weight: bold; margin-top: 20px; min-height: 25px; }
+        #status { font-size: 20px; color: #ff3333; font-weight: bold; }
     </style>
 </head>
 <body>
 
-    <h1>إسحاق هوست - نظام 9.00 🇩🇿</h1>
-    <p style="color: #888;">اختر النسخة التي تريد تفعيلها (بدون فلاشة)</p>
+    <h1>إسحاق بن يحي - نظام 9.00 🇩🇿</h1>
+    <p class="sub-text">تعديل No-USB - ثيم أحمر احترافي</p>
 
-    <div class="btn-group" id="menu">
-        <button onclick="startExploit('2.4b18.bin')" class="btn btn-gold">GoldHen v2.4b18.9 (الأحدث)</button>
-        <button onclick="startExploit('2.3.bin')" class="btn">GoldHen v2.3 (مستقرة)</button>
-        <button onclick="startExploit('2.2.5.bin')" class="btn">GoldHen v2.2.5</button>
-        <button onclick="startExploit('2.1.2.bin')" class="btn" style="background: #333;">GoldHen v2.1.2</button>
+    <div id="menu" class="btn-group">
+        <button onclick="launchExploit('goldhen2.4b18')" class="btn btn-latest">GoldHen v2.4b18</button>
+        <button onclick="launchExploit('goldhen2.3')" class="btn">GoldHen v2.3</button>
+        <button onclick="launchExploit('goldhen2.2.5')" class="btn">GoldHen v2.2.5</button>
+        <button onclick="launchExploit('goldhen2.1.2')" class="btn" style="background: #333333; color: #aaaaaa;">GoldHen v2.1.2</button>
     </div>
 
-    <div id="loader" class="loader"></div>
-    <div id="status"></div>
+    <div id="loader-container">
+        <div class="loader"></div>
+        <div id="status">جاري تحضير الذاكرة...</div>
+    </div>
 
     <script src="int64.js"></script>
     <script src="rop.js"></script>
@@ -81,41 +103,48 @@
     <script src="kexploit.js"></script>
 
     <script>
-        function startExploit(version) {
-            // إخفاء القائمة وإظهار اللودر
+        function launchExploit(fileNamePrefix) {
+            // إخفاء الأزرار وإظهار التحميل
             document.getElementById('menu').style.display = 'none';
-            document.getElementById('loader').style.display = 'block';
+            document.getElementById('loader-container').style.display = 'block';
             
-            var status = document.getElementById('status');
-            status.innerHTML = "جاري تشغيل الثغرة لنسخة " + version + "...";
+            var statusMsg = document.getElementById('status');
+            // اسم الملف الكامل، مثلاً goldhen2.4b18.bin
+            var fullFileName = fileNamePrefix + ".bin";
 
+            statusMsg.innerHTML = "جاري تفعيل " + fileNamePrefix + "... ⏳";
+
+            // بدء التنفيذ بعد ثانية واحدة لثبات المتصفح
             setTimeout(function() {
                 try {
-                    // تشغيل محاكاة الفلاشة (pVFS)
+                    // 1. تشغيل القرص الوهمي (No-USB)
                     if (typeof pVFS_start === "function") {
                         pVFS_start();
-                        status.innerHTML = "تم إنشاء القرص الوهمي.. جاري جلب ملف الـ .bin";
+                        statusMsg.innerHTML = "تم إنشاء القرص الوهمي.. جاري حقن " + fullFileName;
                         
-                        // تحميل ملف الـ .bin بناءً على النسخة المختارة
-                        loadBinFile("goldhen_" + version + ".bin");
+                        // 2. تحميل ملف الـ .bin وحقنه
+                        loadBinPayload(fullFileName);
+                    } else {
+                        statusMsg.innerHTML = "❌ خطأ في ملف kexploit.js (No-USB)";
                     }
                 } catch (e) {
-                    status.innerHTML = "❌ فشلت المحاولة (Out of Memory)";
-                    status.style.color = "#ff4444";
+                    statusMsg.innerHTML = "❌ خطأ في الذاكرة (Memory Error)";
+                    setTimeout(() => location.reload(), 2000);
                 }
             }, 1000);
         }
 
-        function loadBinFile(fileName) {
+        // وظيفة جلب ملف الـ .bin وحقنه
+        function loadBinPayload(file) {
             var xhr = new XMLHttpRequest();
-            xhr.open('GET', fileName, true);
+            xhr.open('GET', file, true);
             xhr.responseType = 'arrayBuffer';
 
             xhr.onload = function() {
                 if (xhr.status === 200) {
                     var payloadBuffer = new Uint8Array(xhr.response);
                     
-                    // إرسال البيانات لوظيفة الحقن في ملف kexploit.js
+                    // إرسال البيانات لوظيفة الحقن (يجب أن تتوفر في kexploit.js)
                     if (typeof dispatchPayload === "function") {
                         dispatchPayload(payloadBuffer);
                         document.getElementById('status').innerHTML = "تم التفعيل بنجاح! ✅";
@@ -124,7 +153,7 @@
                         document.getElementById('status').innerHTML = "تم التفعيل بنجاح! ✅";
                     }
                 } else {
-                    document.getElementById('status').innerHTML = "❌ خطأ: لم يتم العثور على ملف " + fileName;
+                    document.getElementById('status').innerHTML = "❌ خطأ: لم يتم العثور على ملف " + file;
                 }
             };
             xhr.send();
