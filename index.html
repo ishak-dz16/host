@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html manifest="ishak.appcache" lang="ar" dir="rtl">
+<html manifest="cache.manifest" lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -72,12 +72,27 @@
             box-shadow: 0 0 20px #00c6ff;
         }
 
+        /* تنسيق زر الكاش الجديد */
+        .btn-cache {
+            background: linear-gradient(45deg, #d4145a, #fbb03b);
+            margin-top: 5px;
+        }
+
         .btn-info {
             background: linear-gradient(45deg, #222, #444);
-            margin-top: 10px;
+            margin-top: 5px;
             font-size: 16px;
         }
 
+        #cache-status {
+            margin-top: 25px;
+            font-size: 15px;
+            color: #00ffcc;
+            font-weight: bold;
+            min-height: 20px;
+        }
+
+        /* تنسيق المودال */
         .modal {
             display: none;
             position: fixed;
@@ -95,28 +110,9 @@
             border-radius: 20px;
             text-align: center;
             position: relative;
-            animation: slideDown 0.4s;
         }
-
-        @keyframes slideDown { from {opacity: 0; transform: translateY(-50px);} to {opacity: 1; transform: translateY(0);} }
 
         .close { position: absolute; left: 15px; top: 10px; color: #ff4444; font-size: 28px; cursor: pointer; }
-
-        #cache-status {
-            margin-top: 25px;
-            font-size: 15px;
-            color: #00ffcc;
-            font-weight: bold;
-            min-height: 20px;
-            transition: color 0.3s ease;
-        }
-
-        .version-tag {
-            position: fixed;
-            bottom: 15px; left: 15px;
-            font-size: 12px; color: rgba(255,255,255,0.5);
-            z-index: 10;
-        }
     </style>
 </head>
 <body>
@@ -129,6 +125,7 @@
         <div class="btn-group">
             <a href="672/index.html" class="btn">تعديل نظام 6.72</a>
             <a href="900/index.html" class="btn">تعديل نظام 9.00</a>
+            <button onclick="startCache()" class="btn btn-cache">Offline Cache (تفعيل الكاش)</button>
             <button onclick="showInfo()" class="btn btn-info">معلومات المطور</button>
         </div>
 
@@ -142,64 +139,57 @@
             <p>الاسم: <b>إسحاق بن يحي</b></p>
             <p>العمر: <b>11 سنة</b></p>
             <p>البلد: <b>الجزائر 🇩🇿</b></p>
-            <p style="font-size: 12px; color: #888;">مبرمج هوستات PS4 واعد</p>
         </div>
     </div>
 
-    <div class="version-tag">BETA v1.5 - Ishak Host</div>
-
     <script>
-        // وظائف النافذة
         function showInfo() { document.getElementById('infoModal').style.display = "block"; }
         function closeInfo() { document.getElementById('infoModal').style.display = "none"; }
-        window.onclick = function(e) { if (e.target.className == 'modal') closeInfo(); }
 
-        // كود الـ Cache الاحترافي - تطوير إسحاق بن يحي
+        // وظيفة زر الكاش الجديد
+        function startCache() {
+            if (window.applicationCache) {
+                try {
+                    window.applicationCache.update();
+                    document.getElementById('cache-status').innerHTML = "جاري محاولة تحديث الكاش... ⏳";
+                } catch (e) {
+                    document.getElementById('cache-status').innerHTML = "قم بتحديث الصفحة لبدء الكاش";
+                }
+            }
+        }
+
+        // كود معالجة الكاش
         if (window.applicationCache) {
             var appCache = window.applicationCache;
             var statusDisp = document.getElementById('cache-status');
 
-            // عند بدء التحميل الفعلي
             appCache.addEventListener('downloading', function() {
-                statusDisp.innerHTML = "بدء تحميل ملفات الهوست... ⏳";
+                statusDisp.innerHTML = "بدء التحميل... انتظر قليلاً ⏳";
             }, false);
 
-            // تحديث النسبة المئوية
             appCache.addEventListener('progress', function(e) {
                 if (e.lengthComputable) {
                     var percent = Math.round((e.loaded / e.total) * 100);
-                    statusDisp.innerHTML = "جاري الحفظ للاستخدام بدون نت: " + percent + "% 🚀";
-                    statusDisp.style.color = "#ffcc00"; // ذهبي أثناء التحميل
+                    statusDisp.innerHTML = "جاري حفظ الملفات: " + percent + "% 🚀";
+                    statusDisp.style.color = "#ffcc00";
                 }
             }, false);
 
-            // عند النجاح الكامل
             appCache.addEventListener('cached', function() {
-                statusDisp.innerHTML = "تم الحفظ بنجاح يا إسحاق! اقطع النت ✅";
+                statusDisp.innerHTML = "تم الكاش بنجاح! اقطع النت ✅";
                 statusDisp.style.color = "#00ffcc";
-                alert("إسحاق هوست: الملفات جاهزة الآن للعمل بدون إنترنت!");
+                alert("مبروك يا إسحاق! الهوست صار يعمل بدون إنترنت.");
             }, false);
 
-            // إذا كان الهوست محفوظاً مسبقاً ولا يوجد جديد
             appCache.addEventListener('noupdate', function() {
-                statusDisp.innerHTML = "الهوست جاهز ومحفوظ (Offline) ✅";
+                statusDisp.innerHTML = "الهوست جاهز للاستخدام أوفلاين ✅";
                 statusDisp.style.color = "#00ffcc";
             }, false);
 
-            // عند وجود تحديث جديد
-            appCache.addEventListener('updateready', function() {
-                statusDisp.innerHTML = "تم تحميل التحديث الجديد.. جاري التثبيت..";
-                appCache.swapCache();
-                location.reload();
-            }, false);
-
-            // كشف الخطأ
-            appCache.addEventListener('error', function(e) {
-                statusDisp.innerHTML = "❌ فشل الكاش: تأكد من المانيفست أو الأسماء";
+            appCache.addEventListener('error', function() {
+                statusDisp.innerHTML = "❌ فشل الكاش! تأكد من ملف cache.manifest";
                 statusDisp.style.color = "#ff4444";
             }, false);
-        } else {
-            document.getElementById('cache-status').innerHTML = "المتصفح لا يدعم نظام الكاش القديم";
         }
     </script>
 </body>
