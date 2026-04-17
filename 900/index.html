@@ -2,71 +2,131 @@
 <html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
-    <title>ISSAK HOST | PSFREE 9.00</title>
+    <title>إسحاق هوست - خيارات GoldHen 9.00</title>
     <style>
-        body { background: radial-gradient(circle, #200 0%, #000 100%); color: white; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; text-align: center; margin: 0; overflow: hidden; }
-        .header { font-size: 35px; color: #ff0000; text-shadow: 0 0 20px #ff0000; margin-top: 40px; font-weight: bold; }
-        .status-box { margin: 20px auto; padding: 20px; width: 85%; max-width: 550px; background: rgba(0,0,0,0.8); border: 2px solid #ff0000; border-radius: 20px; box-shadow: 0 0 25px rgba(255, 0, 0, 0.5); }
-        #status { font-size: 22px; color: #ffcc00; margin-bottom: 15px; font-weight: bold; }
-        .btn-container { display: flex; flex-direction: column; align-items: center; }
-        .btn { background: linear-gradient(to bottom, #800, #400); color: white; border: 1px solid #f00; padding: 12px; font-size: 18px; border-radius: 8px; cursor: pointer; transition: 0.2s; width: 90%; max-width: 300px; margin: 8px; font-weight: bold; }
-        .btn:hover { background: #f00; box-shadow: 0 0 20px #f00; transform: scale(1.03); }
-        
-        /* زر الإصدار الأخير 2.4b18.9 */
-        .btn-ultimate { 
-            background: linear-gradient(to bottom, #006400, #002200); 
-            border: 2px solid #0f0; 
-            box-shadow: 0 0 15px rgba(0, 255, 0, 0.6); 
-            animation: glow 1.5s infinite alternate;
-        }
-        @keyframes glow {
-            from { box-shadow: 0 0 5px #0f0; }
-            to { box-shadow: 0 0 25px #0f0; }
+        body {
+            background: #000c1f;
+            color: white;
+            font-family: 'Segoe UI', Tahoma, sans-serif;
+            text-align: center;
+            margin: 0;
+            padding-top: 50px;
         }
 
-        .footer { position: fixed; bottom: 10px; width: 100%; color: #555; font-size: 13px; }
+        h1 { color: #00c6ff; text-shadow: 0 0 15px rgba(0,198,255,0.5); }
+        
+        .status-box {
+            color: #ffcc00;
+            font-size: 18px;
+            margin-bottom: 30px;
+            font-weight: bold;
+            min-height: 25px;
+        }
+
+        .btn-group {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .btn {
+            width: 80%;
+            max-width: 350px;
+            padding: 15px;
+            font-size: 18px;
+            font-weight: bold;
+            color: white;
+            background: linear-gradient(45deg, #004e92, #00c6ff);
+            border: none;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 20px #00c6ff;
+        }
+
+        /* تمييز نسخة البيتا أو الأحدث */
+        .btn-latest {
+            background: linear-gradient(45deg, #d4145a, #fbb03b);
+        }
+
+        .loader {
+            display: none;
+            border: 6px solid #f3f3f3;
+            border-top: 6px solid #ffcc00;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            animation: spin 1s linear infinite;
+            margin: 20px auto;
+        }
+
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
     </style>
 </head>
 <body>
 
-    <div class="header">إسحاق هوست 🔥</div>
-    
-    <div class="status-box">
-        <div id="status">جاهز للاختراق.. اختر نسخة GoldHEN</div>
-        
-        <div class="btn-container">
-            <button class="btn btn-ultimate" onclick="launch_payload('goldhen_2.4b18.9.bin')">GoldHEN v2.4b18.9 (الأحدث 🔥)</button>
-            <button class="btn" onclick="launch_payload('goldhen_2.3.bin')">GoldHEN v2.3</button>
-            <button class="btn" onclick="launch_payload('goldhen_2.1.2.bin')">GoldHEN v2.1.2</button>
-        </div>
+    <h1>إسحاق هوست - نظام 9.00 🇩🇿</h1>
+    <p style="color: #888;">اختر نسخة GoldHen لتفعيلها (بدون فلاشة)</p>
+
+    <div id="status-msg" class="status-box">بانتظار اختيار النسخة...</div>
+    <div id="loader" class="loader"></div>
+
+    <div class="btn-group">
+        <button onclick="launchExploit('v2.4b18.bin')" class="btn btn-latest">GoldHen v2.4b18.9 (الأحدث)</button>
+        <button onclick="launchExploit('v2.3.bin')" class="btn">GoldHen v2.3 (مستقرة)</button>
+        <button onclick="launchExploit('v2.2.5.bin')" class="btn">GoldHen v2.2.5</button>
+        <button onclick="launchExploit('v2.1.2.bin')" class="btn" style="background: #333;">GoldHen v2.1.2</button>
     </div>
 
-    <div class="footer">تطوير إسحاق | حصرياً لنسخة 9.00 🇩🇿</div>
+    <p id="log" style="font-size: 12px; color: #555; margin-top: 30px;">تطوير المبرمج إسحاق بن يحي - الجزائر</p>
 
-    <script src="psfree.js"></script>
     <script src="int64.js"></script>
     <script src="rop.js"></script>
     <script src="kexploit.js"></script>
+    <script src="webkit.js"></script>
 
     <script>
-        function launch_payload(payload_name) {
-            document.getElementById('status').innerHTML = "جاري تفعيل PSFree... 🚀";
-            document.getElementById('status').style.color = "#00ffea"; 
+        function launchExploit(version) {
+            // إخفاء الأزرار وإظهار لودر التحميل
+            document.querySelector('.btn-group').style.display = 'none';
+            document.getElementById('loader').style.display = 'block';
             
-            setTimeout(function(){
-                if(typeof run_hax_with_psfree === "function"){
-                    run_hax_with_psfree(payload_name);
-                } else {
-                    // رسالة تنبيه بالعربية لتعطيه طابعاً خاصاً بك
-                    alert("بدأ استدعاء الملف: " + payload_name + "\nانتظر رسالة الفلاشة الآن");
+            var status = document.getElementById('status-msg');
+            status.innerHTML = "جاري تفعيل " + version + " بدون فلاشة... ⏳";
+
+            // بدء عملية الاختراق بعد ثانية واحدة للاستقرار
+            setTimeout(function() {
+                try {
+                    // تشغيل وظيفة المحاكاة (pVFS) الموجودة في kexploit.js
+                    if (typeof pVFS_start === "function") {
+                        pVFS_start();
+                        status.innerHTML = "تم إنشاء القرص الوهمي.. جاري حقن الـ Payload..";
+                        
+                        // استدعاء ملف الـ bin المناسب للنسخة
+                        // هنا نرسل النسخة المختارة للوظيفة المسؤولة عن تحميل الـ Payload
+                        load_payload_by_version(version);
+                    } else {
+                        status.innerHTML = "❌ خطأ: ملف kexploit.js غير جاهز";
+                        status.style.color = "#ff4444";
+                    }
+                } catch (e) {
+                    status.innerHTML = "❌ حدث خطأ في الذاكرة (Out of Memory)";
+                    status.style.color = "#ff4444";
+                    alert("اضغط موافق وأعد محاولة الدخول للصفحة");
+                    location.reload();
                 }
-            }, 600);
+            }, 1000);
         }
 
-        function show_usb_message() {
-            document.getElementById('status').innerHTML = "⚠️ أدخل الفلاشة (USB) الآن يا بطل! ⚠️";
-            document.getElementById('status').style.color = "#ff0000";
-            alert("إسحاق هوست يطلب منك: أدخل الفلاشة الآن");
+        function load_payload_by_version(ver) {
+            console.log("النسخة المطلوبة للحقن هي: " + ver);
+            // ملاحظة: هنا يجب أن يكون لديك منطق في ملف kexploit.js 
+            // يقوم بسحب ملف الـ .bin الصحيح بناءً على النص المرسل (ver)
         }
     </script>
 </body>
