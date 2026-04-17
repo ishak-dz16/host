@@ -1,10 +1,10 @@
-// rop.js - بناء سلسلة العمليات
 var ROP = function() {
-    this.stack = new Uint32Array(0x1000);
+    this.stack = malloc(0x1000);
     this.index = 0;
-    this.push = function(val) {
-        this.stack[this.index++] = val.low;
-        this.stack[this.index++] = val.high;
-    };
-    // دوال للتحكم في سجلات المعالج (Gadgets)
 };
+
+ROP.prototype.push = function(value) {
+    this.write64(this.stack.add(this.index * 8), value);
+    this.index++;
+};
+// هذا الكود يسمح لنا بترتيب الأوامر خلف بعضها
