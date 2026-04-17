@@ -1,0 +1,38 @@
+CACHE MANIFEST 
+
+# Ishak Host v6.0 
+# Date: 2026-04-17
+# هذا الملف يسمح بحفظ الهوست في ذاكرة المتصفح للأبد
+
+CACHE:
+# الصفحة الرئيسية والصور
+index.html
+host pbb.png
+
+# ملفات نظام 9.00 (مجلد 900)
+900/index.html
+900/int64.js
+900/rop.js
+900/webkit.js
+900/kexploit.js
+
+# (مجلد 672) ملفات نظام 6.72
+672/index.html
+672/int64.js
+672/exploit.js
+672/common.js
+
+# ملفات الجولدهان (الـ BIN)
+900/goldhen_2.4b18.bin
+900/goldhen_2.3.bin
+900/goldhen_2.2.5.bin
+900/goldhen_2.1.2.bin
+672/goldhen_2.3.bin
+672/goldhen_2.1.2.bin
+672/goldhen_2.4b14.bin
+
+NETWORK:
+*
+
+SETTINGS:
+prefer-online: false
