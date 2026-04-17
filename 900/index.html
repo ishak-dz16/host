@@ -2,32 +2,23 @@
 <html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
-    <title>إسحاق هوست - خيارات GoldHen 9.00</title>
+    <title>إسحاق هوست - اختيار نسخة GoldHen</title>
     <style>
         body {
             background: #000c1f;
             color: white;
             font-family: 'Segoe UI', Tahoma, sans-serif;
             text-align: center;
-            margin: 0;
             padding-top: 50px;
         }
-
         h1 { color: #00c6ff; text-shadow: 0 0 15px rgba(0,198,255,0.5); }
         
-        .status-box {
-            color: #ffcc00;
-            font-size: 18px;
-            margin-bottom: 30px;
-            font-weight: bold;
-            min-height: 25px;
-        }
-
         .btn-group {
             display: flex;
             flex-direction: column;
             align-items: center;
             gap: 15px;
+            margin-top: 30px;
         }
 
         .btn {
@@ -39,7 +30,7 @@
             color: white;
             background: linear-gradient(45deg, #004e92, #00c6ff);
             border: none;
-            border-radius: 12px;
+            border-radius: 15px;
             cursor: pointer;
             transition: 0.3s;
         }
@@ -49,8 +40,7 @@
             box-shadow: 0 0 20px #00c6ff;
         }
 
-        /* تمييز نسخة البيتا أو الأحدث */
-        .btn-latest {
+        .btn-gold {
             background: linear-gradient(45deg, #d4145a, #fbb03b);
         }
 
@@ -66,67 +56,78 @@
         }
 
         @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+        
+        #status { color: #ffcc00; font-weight: bold; margin-top: 20px; min-height: 25px; }
     </style>
 </head>
 <body>
 
     <h1>إسحاق هوست - نظام 9.00 🇩🇿</h1>
-    <p style="color: #888;">اختر نسخة GoldHen لتفعيلها (بدون فلاشة)</p>
+    <p style="color: #888;">اختر النسخة التي تريد تفعيلها (بدون فلاشة)</p>
 
-    <div id="status-msg" class="status-box">بانتظار اختيار النسخة...</div>
-    <div id="loader" class="loader"></div>
-
-    <div class="btn-group">
-        <button onclick="launchExploit('v2.4b18.bin')" class="btn btn-latest">GoldHen v2.4b18.9 (الأحدث)</button>
-        <button onclick="launchExploit('v2.3.bin')" class="btn">GoldHen v2.3 (مستقرة)</button>
-        <button onclick="launchExploit('v2.2.5.bin')" class="btn">GoldHen v2.2.5</button>
-        <button onclick="launchExploit('v2.1.2.bin')" class="btn" style="background: #333;">GoldHen v2.1.2</button>
+    <div class="btn-group" id="menu">
+        <button onclick="startExploit('2.4b18.bin')" class="btn btn-gold">GoldHen v2.4b18.9 (الأحدث)</button>
+        <button onclick="startExploit('2.3.bin')" class="btn">GoldHen v2.3 (مستقرة)</button>
+        <button onclick="startExploit('2.2.5.bin')" class="btn">GoldHen v2.2.5</button>
+        <button onclick="startExploit('2.1.2.bin')" class="btn" style="background: #333;">GoldHen v2.1.2</button>
     </div>
 
-    <p id="log" style="font-size: 12px; color: #555; margin-top: 30px;">تطوير المبرمج إسحاق بن يحي - الجزائر</p>
+    <div id="loader" class="loader"></div>
+    <div id="status"></div>
 
     <script src="int64.js"></script>
     <script src="rop.js"></script>
-    <script src="kexploit.js"></script>
     <script src="webkit.js"></script>
+    <script src="kexploit.js"></script>
 
     <script>
-        function launchExploit(version) {
-            // إخفاء الأزرار وإظهار لودر التحميل
-            document.querySelector('.btn-group').style.display = 'none';
+        function startExploit(version) {
+            // إخفاء القائمة وإظهار اللودر
+            document.getElementById('menu').style.display = 'none';
             document.getElementById('loader').style.display = 'block';
             
-            var status = document.getElementById('status-msg');
-            status.innerHTML = "جاري تفعيل " + version + " بدون فلاشة... ⏳";
+            var status = document.getElementById('status');
+            status.innerHTML = "جاري تشغيل الثغرة لنسخة " + version + "...";
 
-            // بدء عملية الاختراق بعد ثانية واحدة للاستقرار
             setTimeout(function() {
                 try {
-                    // تشغيل وظيفة المحاكاة (pVFS) الموجودة في kexploit.js
+                    // تشغيل محاكاة الفلاشة (pVFS)
                     if (typeof pVFS_start === "function") {
                         pVFS_start();
-                        status.innerHTML = "تم إنشاء القرص الوهمي.. جاري حقن الـ Payload..";
+                        status.innerHTML = "تم إنشاء القرص الوهمي.. جاري جلب ملف الـ .bin";
                         
-                        // استدعاء ملف الـ bin المناسب للنسخة
-                        // هنا نرسل النسخة المختارة للوظيفة المسؤولة عن تحميل الـ Payload
-                        load_payload_by_version(version);
-                    } else {
-                        status.innerHTML = "❌ خطأ: ملف kexploit.js غير جاهز";
-                        status.style.color = "#ff4444";
+                        // تحميل ملف الـ .bin بناءً على النسخة المختارة
+                        loadBinFile("goldhen_" + version + ".bin");
                     }
                 } catch (e) {
-                    status.innerHTML = "❌ حدث خطأ في الذاكرة (Out of Memory)";
+                    status.innerHTML = "❌ فشلت المحاولة (Out of Memory)";
                     status.style.color = "#ff4444";
-                    alert("اضغط موافق وأعد محاولة الدخول للصفحة");
-                    location.reload();
                 }
             }, 1000);
         }
 
-        function load_payload_by_version(ver) {
-            console.log("النسخة المطلوبة للحقن هي: " + ver);
-            // ملاحظة: هنا يجب أن يكون لديك منطق في ملف kexploit.js 
-            // يقوم بسحب ملف الـ .bin الصحيح بناءً على النص المرسل (ver)
+        function loadBinFile(fileName) {
+            var xhr = new XMLHttpRequest();
+            xhr.open('GET', fileName, true);
+            xhr.responseType = 'arrayBuffer';
+
+            xhr.onload = function() {
+                if (xhr.status === 200) {
+                    var payloadBuffer = new Uint8Array(xhr.response);
+                    
+                    // إرسال البيانات لوظيفة الحقن في ملف kexploit.js
+                    if (typeof dispatchPayload === "function") {
+                        dispatchPayload(payloadBuffer);
+                        document.getElementById('status').innerHTML = "تم التفعيل بنجاح! ✅";
+                    } else if (typeof PLOAD === "function") {
+                        PLOAD(payloadBuffer);
+                        document.getElementById('status').innerHTML = "تم التفعيل بنجاح! ✅";
+                    }
+                } else {
+                    document.getElementById('status').innerHTML = "❌ خطأ: لم يتم العثور على ملف " + fileName;
+                }
+            };
+            xhr.send();
         }
     </script>
 </body>
