@@ -1,31 +1,10 @@
 CACHE MANIFEST 
-
-# Issak Host - Full Offline (6.72 + 9.00)
-# v3.5 - 2026-04-17
-# تطوير إسحاق بن يحيى 🇩🇿
+# v4.0 - Ishak Host
 
 CACHE:
-# الصفحة الرئيسية
 index.html
-
-# --- ملفات نظام 9.00 ---
 900/index.html
-900/psfree.js
-900/int64.js
-900/rop.js
-900/kexploit.js
-900/goldhen_2.4b18.9.bin
-900/goldhen_2.3.bin
-900/goldhen_2.1.2.bin
-
-# --- ملفات نظام 6.72 (التي ذكرتها الآن) ---
 672/index.html
-672/common.js
-672/int64.js
-672/exploit.js
-672/goldhen_2.1.2.bin
-672/goldhen_2.3.bin
-672/goldhen_2.4b14.bin
 
 NETWORK:
 *
