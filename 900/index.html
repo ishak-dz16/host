@@ -2,124 +2,72 @@
 <html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>إسحاق هوست - 9.00 Red Edition</title>
+    <title>ISSAK HOST | PSFREE 9.00</title>
     <style>
-        body {
-            background-color: #0d0000;
-            color: white;
-            font-family: sans-serif;
-            text-align: center;
-            margin: 0;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            height: 100vh;
+        body { background: radial-gradient(circle, #200 0%, #000 100%); color: white; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; text-align: center; margin: 0; overflow: hidden; }
+        .header { font-size: 35px; color: #ff0000; text-shadow: 0 0 20px #ff0000; margin-top: 40px; font-weight: bold; }
+        .status-box { margin: 20px auto; padding: 20px; width: 85%; max-width: 550px; background: rgba(0,0,0,0.8); border: 2px solid #ff0000; border-radius: 20px; box-shadow: 0 0 25px rgba(255, 0, 0, 0.5); }
+        #status { font-size: 22px; color: #ffcc00; margin-bottom: 15px; font-weight: bold; }
+        .btn-container { display: flex; flex-direction: column; align-items: center; }
+        .btn { background: linear-gradient(to bottom, #800, #400); color: white; border: 1px solid #f00; padding: 12px; font-size: 18px; border-radius: 8px; cursor: pointer; transition: 0.2s; width: 90%; max-width: 300px; margin: 8px; font-weight: bold; }
+        .btn:hover { background: #f00; box-shadow: 0 0 20px #f00; transform: scale(1.03); }
+        
+        /* زر الإصدار الأخير 2.4b18.9 */
+        .btn-ultimate { 
+            background: linear-gradient(to bottom, #006400, #002200); 
+            border: 2px solid #0f0; 
+            box-shadow: 0 0 15px rgba(0, 255, 0, 0.6); 
+            animation: glow 1.5s infinite alternate;
+        }
+        @keyframes glow {
+            from { box-shadow: 0 0 5px #0f0; }
+            to { box-shadow: 0 0 25px #0f0; }
         }
 
-        .header {
-            font-size: 30px;
-            font-weight: bold;
-            color: #ff0000;
-            text-shadow: 0 0 15px #ff0000;
-            margin-bottom: 20px;
-        }
-
-        .container {
-            background: rgba(255, 0, 0, 0.05);
-            border: 1px solid #ff0000;
-            padding: 30px;
-            border-radius: 20px;
-            box-shadow: 0 0 25px rgba(255, 0, 0, 0.3);
-            width: 85%;
-            max-width: 450px;
-        }
-
-        .btn-group {
-            display: grid;
-            grid-template-columns: 1fr;
-            gap: 12px;
-        }
-
-        .btn {
-            padding: 15px;
-            background: linear-gradient(45deg, #800000, #ff0000);
-            border: none;
-            color: white;
-            border-radius: 12px;
-            cursor: pointer;
-            font-size: 17px;
-            font-weight: bold;
-            transition: 0.3s;
-        }
-
-        .btn:hover {
-            transform: scale(1.03);
-            filter: brightness(1.2);
-            box-shadow: 0 0 15px #ff0000;
-        }
-
-        #status {
-            margin-top: 25px;
-            font-size: 18px;
-            color: #ffcc00;
-            font-weight: bold;
-            min-height: 25px;
-        }
-
-        .footer-text {
-            margin-top: 20px;
-            font-size: 12px;
-            color: #666;
-        }
+        .footer { position: fixed; bottom: 10px; width: 100%; color: #555; font-size: 13px; }
     </style>
-
-    <script src="./int64.js"></script>
-<script src="./rop.js"></script>
-<script src="./kexploit.js"></script>
-<script src="./payload.js"></script>
 </head>
 <body>
 
-    <div class="header">إسحاق هوست - إصدار 9.00</div>
-
-    <div class="container">
-        <div id="status">جاهز لتشغيل الثغرة...</div>
-        <br>
-        <div class="btn-group">
-            <button class="btn" onclick="load_goldhen('GoldHEN212.bin')">GoldHEN v2.1.2</button>
-            <button class="btn" onclick="load_goldhen('GoldHEN23.bin')">GoldHEN v2.3</button>
-            <button class="btn" onclick="load_goldhen('GoldHEN_Latest.bin')">GoldHEN Latest (جديد) 🔥</button>
-        </div>
+    <div class="header">إسحاق هوست 🔥</div>
+    
+    <div class="status-box">
+        <div id="status">جاهز للاختراق.. اختر نسخة GoldHEN</div>
         
-        <a href="../index.html" style="color: #888; text-decoration: none; display: block; margin-top: 15px;">العودة للخلف</a>
+        <div class="btn-container">
+            <button class="btn btn-ultimate" onclick="launch_payload('goldhen_2.4b18.9.bin')">GoldHEN v2.4b18.9 (الأحدث 🔥)</button>
+            <button class="btn" onclick="launch_payload('goldhen_2.3.bin')">GoldHEN v2.3</button>
+            <button class="btn" onclick="launch_payload('goldhen_2.1.2.bin')">GoldHEN v2.1.2</button>
+        </div>
     </div>
 
-    <div class="footer-text">قاعدة البيانات مستوحاة من مستودع Isfayeed</div>
+    <div class="footer">تطوير إسحاق | حصرياً لنسخة 9.00 🇩🇿</div>
+
+    <script src="psfree.js"></script>
+    <script src="int64.js"></script>
+    <script src="rop.js"></script>
+    <script src="kexploit.js"></script>
 
     <script>
-        function load_goldhen(payloadName) {
-            document.getElementById('status').innerHTML = "جاري تشغيل Webkit... انتظر رسالة USB ⏳";
-            document.getElementById('status').style.color = "#ffcc00";
-
-            // في نسخة 9.00 نستخدم سلسلة من الأوامر لفتح الثغرة
-            setTimeout(function() {
-                try {
-                    // الوظيفة الأساسية في مستودع إسلام فايد غالباً ما تكون محملة تلقائياً
-                    // سنقوم بتمرير اسم الملف المختار لبرنامج الإرسال
-                    run_jb(payloadName); 
-                } catch(e) {
-                    // إذا فشل التشغيل التلقائي، نظهر رسالة خطأ
-                    document.getElementById('status').innerHTML = "خطأ: تأكد من وجود ملفات kexploit.js و payload.js";
-                    document.getElementById('status').style.color = "#ff0000";
+        function launch_payload(payload_name) {
+            document.getElementById('status').innerHTML = "جاري تفعيل PSFree... 🚀";
+            document.getElementById('status').style.color = "#00ffea"; 
+            
+            setTimeout(function(){
+                if(typeof run_hax_with_psfree === "function"){
+                    run_hax_with_psfree(payload_name);
+                } else {
+                    // رسالة تنبيه بالعربية لتعطيه طابعاً خاصاً بك
+                    alert("بدأ استدعاء الملف: " + payload_name + "\nانتظر رسالة الفلاشة الآن");
                 }
-            }, 500);
+            }, 600);
         }
 
-        // إخفاء أخطاء الذاكرة المعتادة في 9.00
-        window.onerror = function() { return true; };
+        function show_usb_message() {
+            document.getElementById('status').innerHTML = "⚠️ أدخل الفلاشة (USB) الآن يا بطل! ⚠️";
+            document.getElementById('status').style.color = "#ff0000";
+            alert("إسحاق هوست يطلب منك: أدخل الفلاشة الآن");
+        }
     </script>
-
 </body>
 </html>
