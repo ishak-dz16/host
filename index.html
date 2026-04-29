@@ -1,10 +1,9 @@
 <!DOCTYPE html>
-<html manifest="cache.manifest" lang="ar" dir="rtl">
+<html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>إسحاق بن يحي - BETA 3.0</title>
-    <title>هوست إسحاق بن يحي - النسخة الاحترافية</title>
     <style>
         body {
             background: #000c1f url('host pbb.png') no-repeat center center fixed;
@@ -73,7 +72,6 @@
             box-shadow: 0 0 20px #00c6ff;
         }
 
-        /* تنسيق زر الكاش الجديد */
         .btn-cache {
             background: linear-gradient(45deg, #d4145a, #fbb03b);
             margin-top: 5px;
@@ -83,14 +81,6 @@
             background: linear-gradient(45deg, #222, #444);
             margin-top: 5px;
             font-size: 16px;
-        }
-
-        #cache-status {
-            margin-top: 25px;
-            font-size: 15px;
-            color: #00ffcc;
-            font-weight: bold;
-            min-height: 20px;
         }
 
         /* تنسيق المودال */
@@ -126,11 +116,9 @@
         <div class="btn-group">
             <a href="672/index.html" class="btn">تعديل نظام 6.72</a>
             <a href="900/index.html" class="btn">تعديل نظام 9.00</a>
-            <button onclick="startCache()" class="btn btn-cache">Offline Cache (تفعيل الكاش)</button>
+            <a href="cache.html" class="btn btn-cache">Offline Cache (تفعيل الكاش)</a>
             <button onclick="showInfo()" class="btn btn-info">معلومات المطور</button>
         </div>
-
-        <div id="cache-status">جاري التحقق من التحديثات...</div>
     </div>
 
     <div id="infoModal" class="modal">
@@ -146,52 +134,9 @@
     <script>
         function showInfo() { document.getElementById('infoModal').style.display = "block"; }
         function closeInfo() { document.getElementById('infoModal').style.display = "none"; }
-
-        // وظيفة زر الكاش الجديد
-        function startCache() {
-            if (window.applicationCache) {
-                try {
-                    window.applicationCache.update();
-                    document.getElementById('cache-status').innerHTML = "جاري محاولة تحديث الكاش... ⏳";
-                } catch (e) {
-                    document.getElementById('cache-status').innerHTML = "قم بتحديث الصفحة لبدء الكاش";
-                }
-            }
-        }
-
-        // كود معالجة الكاش
-        if (window.applicationCache) {
-            var appCache = window.applicationCache;
-            var statusDisp = document.getElementById('cache-status');
-
-            appCache.addEventListener('downloading', function() {
-                statusDisp.innerHTML = "بدء التحميل... انتظر قليلاً ⏳";
-            }, false);
-
-            appCache.addEventListener('progress', function(e) {
-                if (e.lengthComputable) {
-                    var percent = Math.round((e.loaded / e.total) * 100);
-                    statusDisp.innerHTML = "جاري حفظ الملفات: " + percent + "% 🚀";
-                    statusDisp.style.color = "#ffcc00";
-                }
-            }, false);
-
-            appCache.addEventListener('cached', function() {
-                statusDisp.innerHTML = "تم الكاش بنجاح! اقطع النت ✅";
-                statusDisp.style.color = "#00ffcc";
-                alert("مبروك يا إسحاق! الهوست صار يعمل بدون إنترنت.");
-            }, false);
-
-            appCache.addEventListener('noupdate', function() {
-                statusDisp.innerHTML = "الهوست جاهز للاستخدام أوفلاين ✅";
-                statusDisp.style.color = "#00ffcc";
-            }, false);
-
-            appCache.addEventListener('error', function() {
-                statusDisp.innerHTML = "❌ فشل الكاش! تأكد من ملف cache.manifest";
-                statusDisp.style.color = "#ff4444";
-            }, false);
-        }
+        
+        // المرة الجاية كي يدخل أوفلاين، المتصفح يحوس على المانيفست
+        // إذا لقا كلش مخبي، يخدم عادي من الكاش
     </script>
 </body>
 </html>
