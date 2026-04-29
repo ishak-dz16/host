@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html manifest="cache.manifest">
+<head>
+    <title>Installing Offline Cache</title>
+    <style>
+        body { background-color: black; color: white; text-align: center; font-family: sans-serif; padding-top: 50px; }
+        #progress-container { width: 80%; border: 2px solid red; margin: 20px auto; height: 30px; border-radius: 15px; }
+        #progress-bar { width: 0%; height: 100%; background-color: red; border-radius: 13px; transition: width 0.2s; }
+        #status { font-size: 24px; margin-top: 20px; }
+    </style>
+</head>
+<body>
+    <h1>Ishak Host - Offline Caching</h1>
+    <div id="progress-container">
+        <div id="progress-bar"></div>
+    </div>
+    <div id="status">0%</div>
+
+    <script>
+        var cache = window.applicationCache;
+        var statusDiv = document.getElementById('status');
+        var bar = document.getElementById('progress-bar');
+
+        cache.addEventListener('progress', function(e) {
+            var percent = Math.round((e.loaded / e.total) * 100);
+            statusDiv.innerHTML = percent + "%";
+            bar.style.width = percent + "%";
+        }, false);
+
+        cache.addEventListener('cached', function() {
+            statusDiv.innerHTML = "Successfully! أخرج من المتصفح، طفي الأنترنت وعاود أدخل";
+            setTimeout(function(){
+                // هادي هي العفسة اللي تخلي المرة الجاية يدخل للرئيسية مباشرة
+                location.href = "index.html"; 
+            }, 5000);
+        }, false);
+
+        cache.addEventListener('noupdate', function() {
+            location.href = "index.html";
+        }, false);
+
+        cache.addEventListener('error', function() {
+            statusDiv.innerHTML = "Error! كاين مشكل في ملف المانيفست";
+        }, false);
+    </script>
+</body>
+</html>
