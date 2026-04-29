@@ -1,12 +1,11 @@
 <!DOCTYPE html>
-<html lang="ar" dir="rtl">
-<head>
+<html lang="ar" dir="rtl" manifest="cache.manifest"> <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>إسحاق بن يحي - BETA 3.0</title>
     <style>
         body {
-            background: #000c1f url('host pbb.png') no-repeat center center fixed;
+            background: #000c1f url('host%20pbb.png') no-repeat center center fixed;
             background-size: cover;
             color: white;
             font-family: 'Segoe UI', Tahoma, sans-serif;
@@ -104,6 +103,9 @@
         }
 
         .close { position: absolute; left: 15px; top: 10px; color: #ff4444; font-size: 28px; cursor: pointer; }
+        
+        /* شريط التحميل الجديد */
+        #status-text { margin-bottom: 10px; color: #fbb03b; font-weight: bold; }
     </style>
 </head>
 <body>
@@ -113,6 +115,8 @@
     <div class="container">
         <h1>إسحاق هوست 🇩🇿</h1>
         
+        <div id="status-text"></div>
+
         <div class="btn-group">
             <a href="672/index.html" class="btn">تعديل نظام 6.72</a>
             <a href="900/index.html" class="btn">تعديل نظام 9.00</a>
@@ -135,8 +139,26 @@
         function showInfo() { document.getElementById('infoModal').style.display = "block"; }
         function closeInfo() { document.getElementById('infoModal').style.display = "none"; }
         
-        // المرة الجاية كي يدخل أوفلاين، المتصفح يحوس على المانيفست
-        // إذا لقا كلش مخبي، يخدم عادي من الكاش
+        // كود الكاش الجديد
+        var statusDisp = document.getElementById('status-text');
+
+        window.applicationCache.addEventListener('downloading', function() {
+            statusDisp.innerHTML = "جاري تحميل الملفات... انتظر قليلاً";
+        }, false);
+
+        window.applicationCache.addEventListener('progress', function(e) {
+            var progress = Math.round((e.loaded / e.total) * 100);
+            statusDisp.innerHTML = "جاري الحفظ: " + progress + "%";
+        }, false);
+
+        window.applicationCache.addEventListener('cached', function() {
+            statusDisp.innerHTML = "تم الحفظ بنجاح! الهوست جاهز أوفلاين.";
+            alert("تم حفظ الهوست بنجاح! يمكنك الآن استخدامه بدون إنترنت.");
+        }, false);
+
+        window.applicationCache.addEventListener('error', function() {
+            statusDisp.innerHTML = "فشل في الكاش! تأكد من ملف cache.manifest";
+        }, false);
     </script>
 </body>
 </html>
