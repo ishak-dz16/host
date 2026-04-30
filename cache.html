@@ -1,71 +1,122 @@
 <!DOCTYPE html>
-<html manifest="cache.appcache"> <head>
+<html manifest="cache.appcache">
+<head>
     <meta charset="UTF-8">
-    <title>جاري التحميل وتثبيت الكاش...</title>
+    <title>PS4 Cache Installation</title>
     <style>
         body {
             background: #000c1f url('cache_pbb.png') no-repeat center center fixed;
             background-color: #1a1a1a;
             color: white;
-            font-family: sans-serif;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             text-align: center;
             padding-top: 50px;
         }
-        .loader {
-            border: 16px solid #f3f3f3;
-            border-top: 16px solid #3498db;
-            border-radius: 50%;
-            width: 80px;
-            height: 80px;
-            animation: spin 2s linear infinite;
-            margin: 20px auto;
+        .container {
+            width: 80%;
+            margin: auto;
         }
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
+        /* تصميم شريط التحميل */
+        #progress-container {
+            width: 100%;
+            background-color: #333;
+            border-radius: 20px;
+            margin: 20px 0;
+            border: 2px solid #555;
         }
-        img {
-            max-width: 200px;
-            margin-bottom: 20px;
+        #progress-bar {
+            width: 0%;
+            height: 30px;
+            background-color: #3498db;
+            border-radius: 20px;
+            transition: width 0.3s;
+        }
+        #status-text { margin-top: 10px; font-size: 18px; }
+        #percentage { font-size: 24px; font-weight: bold; color: #3498db; }
+        #file-name { color: #888; font-size: 14px; margin-top: 5px; }
+        .instruction {
+            display: none; /* مخفي حتى يخلص الكاش */
+            background: #2c3e50;
+            padding: 20px;
             border-radius: 10px;
+            border: 1px solid #3498db;
+            margin-top: 20px;
         }
     </style>
 </head>
 <body>
 
-    <img src="اسم_التصويرة_تاعك.jpg" alt="Loading...">
+    <div class="container">
+        <img src="your-image.jpg" alt="PS4 Exploit" style="max-width:200px; border-radius:10px;">
+        
+        <h1>جاري تثبيت الكاش للاوفلاين</h1>
+        
+        <div id="percentage">0%</div>
+        
+        <div id="progress-container">
+            <div id="progress-bar"></div>
+        </div>
 
-    <h1>جاري حفظ الملفات للاستخدام أوفلاين</h1>
-    <div class="loader"></div>
-    <p id="status">يرجى الانتظار، يتم الآن تخزين البيانات...</p>
+        <div id="status-text">يرجى الانتظار...</div>
+        <div id="file-name">جاري فحص الملفات...</div>
+
+        <div id="instruction-box" class="instruction">
+            <h2 style="color: #f1c40f;">تم الكاش بنجاح!</h2>
+            <p>من فضلك اطفئ الانترنت على جهاز PS4، ثم أعد تشغيل المتصفح.</p>
+            <p>سيتم توجيهك للصفحة الرئيسية الآن...</p>
+        </div>
+    </div>
 
     <script>
-        // دالة تعاود ترجعك للصفحة الرئيسية
-        function goToHome() {
-            document.getElementById("status").innerHTML = "تم الكاش بنجاح! جاري العودة...";
+        var cache = window.applicationCache;
+        var bar = document.getElementById('progress-bar');
+        var percent = document.getElementById('percentage');
+        var statusTxt = document.getElementById('status-text');
+        var fileName = document.getElementById('file-name');
+        var instructionBox = document.getElementById('instruction-box');
+
+        // حساب التقدم
+        cache.addEventListener('progress', function(e) {
+            if (e.lengthComputable) {
+                var p = Math.round((e.loaded / e.total) * 100);
+                bar.style.width = p + '%';
+                percent.innerHTML = p + '%';
+                statusTxt.innerHTML = "جاري تحميل الملفات...";
+                // ملاحظة: المتصفح ما يعطيكش اسم الملف مباشرة، بصح يبين التقدم
+                fileName.innerHTML = "تحميل ملف " + e.loaded + " من أصل " + e.total;
+            }
+        }, false);
+
+        // كي يخلص الكاش 100%
+        cache.addEventListener('cached', function() {
+            finishAction();
+        }, false);
+
+        cache.addEventListener('noupdate', function() {
+            finishAction();
+        }, false);
+
+        function finishAction() {
+            bar.style.width = '100%';
+            percent.innerHTML = '100%';
+            statusTxt.innerHTML = "اكتملت العملية!";
+            fileName.innerHTML = "";
+            
+            // إظهار الميساج تاعك
+            instructionBox.style.display = "block";
+
+            // الرجوع أوتوماتيكياً للصفحة الرئيسية بعد 5 ثواني
             setTimeout(function(){
                 window.location.href = "index.html";
-            }, 2000); // يستنى 2 ثواني ويرجعك
+            }, 5000); 
         }
 
-        // إذا كنت تستعمل Application Cache (الطريقة القديمة)
-        if (window.applicationCache) {
-            window.applicationCache.addEventListener('cached', function() {
-                goToHome();
-            }, false);
+        // في حالة وجود خطأ
+        cache.addEventListener('error', function() {
+            statusTxt.innerHTML = "حدث خطأ أو الملفات موجودة مسبقاً.";
+            setTimeout(function(){ window.location.href = "index.html"; }, 3000);
+        }, false);
 
-            window.applicationCache.addEventListener('noupdate', function() {
-                goToHome();
-            }, false);
-            
-            window.applicationCache.addEventListener('error', function() {
-                // حتى لو صرا خطأ يرجعك باش ما تبقاش محبوس
-                goToHome();
-            }, false);
-        } else {
-            // إذا ماكانش كاش، يرجعك بعد 5 ثواني احتياطيا
-            setTimeout(goToHome, 5000);
-        }
     </script>
 </body>
 </html>
