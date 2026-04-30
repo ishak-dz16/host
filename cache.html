@@ -21,39 +21,40 @@
             padding: 30px;
             border-radius: 15px;
             background: #222;
+            box-shadow: 0 0 20px rgba(0, 255, 204, 0.2);
         }
         h1 { color: #00ffcc; }
+        p { font-size: 18px; }
     </style>
 </head>
 <body>
 
     <div class="box">
-        <h1 id="status">جاري حفظ الملفات...</h1>
-        <p id="msg">يرجى الانتظار قليلاً</p>
+        <h1 id="status">جاري حفظ الهوست...</h1>
+        <p id="msg">يرجى الانتظار، لا تغلق الصفحة.</p>
     </div>
 
     <script>
         var cache = window.applicationCache;
 
-        cache.addEventListener('cached', function() {
+        // التصحيح هنا: الأقواس والترتيب
+        cache.addEventListener('cached', function(e) {
             document.getElementById("status").innerHTML = "تم الحفظ بنجاح!";
-            document.getElementById("msg").innerHTML = "الآن اخرج من المتصفح، اقطع الإنترنت، ثم عد للدخول مجدداً.";
-            // هنا الكود يحبس باش يخليك نتا تخرج وتطفي النت براحتك
+            document.getElementById("msg").innerHTML = "الآن: اخرج من المتصفح، طفي الأنترنت، وعاود ادخل للهوست.";
         }, false);
 
-        cache.addEventListener('updateready', function() {
+        cache.addEventListener('updateready', function(e) {
             cache.swapCache();
             location.reload();
         }, false);
 
-        cache.addEventListener('noupdate', function() {
-            // إذا الملفات محفوظة ديجا، يديك ديريكت للصفحة الرئيسية
+        cache.addEventListener('noupdate', function(e) {
             window.location.href = "index.html";
         }, false);
 
-        cache.addEventListener('error', function() {
-            document.getElementById("status").innerHTML = "حدث خطأ!";
-            document.getElementById("msg").innerHTML = "تأكد من ملف المانيفست والأنترنت.";
+        cache.addEventListener('error', function(e) {
+            document.getElementById("status").innerHTML = "خطأ في الكاش!";
+            document.getElementById("msg").innerHTML = "تأكد من ملف manifest.cache أو اتصالك بالنت.";
         }, false);
     </script>
 </body>
