@@ -1,32 +1,124 @@
 <!DOCTYPE html>
-<html manifest="offline.cache">
+<html manifest="cache.manifest">
 <head>
     <meta charset="UTF-8">
-    <title>Cache Page</title>
+    <title>Ishak Host v6.1 - Full Cache</title>
+    <style>
+        body {
+            background-image: url('cache_pbb.png'); /* رجعناها PNG كيما طلبت */
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            color: white;
+            text-align: center;
+            font-family: sans-serif;
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+        }
+
+        .main-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            background: rgba(0, 0, 0, 0.5); /* تعتيم خفيف للخلفية باش يبان الكود */
+        }
+
+        .title {
+            font-size: 35px;
+            font-weight: bold;
+            text-shadow: 3px 3px 5px #000;
+            margin-bottom: 20px;
+            color: #fff;
+        }
+
+        .progress-wrapper {
+            width: 85%;
+            max-width: 600px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 50px;
+            padding: 5px;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.5);
+        }
+
+        #progress-bar {
+            width: 0%;
+            height: 30px;
+            background: linear-gradient(to right, #ff0000, #ff5f6d); /* لون أحمر مثل هوست إسلام */
+            border-radius: 50px;
+            transition: width 0.4s ease;
+            box-shadow: 0 0 10px #ff0000;
+        }
+
+        #status {
+            margin-top: 25px;
+            font-size: 22px;
+            font-weight: bold;
+            text-shadow: 2px 2px 4px #000;
+        }
+
+        #percentage {
+            margin-top: 10px;
+            font-size: 28px;
+            font-weight: bold;
+            color: #ff0000;
+        }
+    </style>
 </head>
 <body>
-    <h1 style="text-align:center;">جاري تحميل الكاش...</h1>
-    
+
+    <div class="main-container">
+        <div class="title">Ishak Host v6.1</div>
+        
+        <div class="progress-wrapper">
+            <div id="progress-bar"></div>
+        </div>
+        
+        <div id="percentage">0%</div>
+        <div id="status">جاري فحص ملفات النظام...</div>
+    </div>
+
     <script>
-        // السطر الأول: التصحيح اللي قلت عليه
         var cache = window.applicationCache;
+        var bar = document.getElementById('progress-bar');
+        var statusTxt = document.getElementById('status');
+        var percentTxt = document.getElementById('percentage');
 
-        // السطر الثاني: تصحيح الـ Event Listener والـ Function
-        cache.addEventListener("cached", function(e) {
-            alert("تم الحفظ! طفي الأنترنت دوكا.");
-            // الرجوع التلقائي
+        cache.addEventListener('downloading', function() {
+            statusTxt.innerHTML = "جاري تحميل الكاش الكامل (9.00 + 6.72)...";
+        });
+
+        cache.addEventListener('progress', function(e) {
+            if (e.lengthComputable) {
+                var p = Math.round((e.loaded / e.total) * 100);
+                bar.style.width = p + '%';
+                percentTxt.innerHTML = p + "%";
+                statusTxt.innerHTML = "تحميل الملفات: " + e.loaded + " / " + e.total;
+            }
+        });
+
+        cache.addEventListener('cached', function() {
+            statusTxt.innerHTML = "تم تثبيت الكاش بنجاح! طفي الأنترنت الآن.";
+            statusTxt.style.color = "#00ff00";
+            setTimeout(function(){ window.location.href = "index.html"; }, 2500);
+        });
+
+        cache.addEventListener('updateready', function() {
+            cache.swapCache();
+            window.location.reload();
+        });
+
+        cache.addEventListener('error', function() {
+            statusTxt.innerHTML = "Error: كاين مشكل في ملف cache.manifest!";
+            statusTxt.style.color = "#ff0000";
+        });
+
+        cache.addEventListener('noupdate', function() {
             window.location.href = "index.html";
-        }, false);
-
-        // إذا كان الكاش ديجا موجود وما سحقش تحديث
-        cache.addEventListener("noupdate", function(e) {
-            window.location.href = "index.html";
-        }, false);
-
-        // في حالة وجود خطأ
-        cache.addEventListener("error", function(e) {
-            console.log("Error status: " + e);
-        }, false);
+        });
     </script>
 </body>
 </html>
