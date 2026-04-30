@@ -1,60 +1,31 @@
 <!DOCTYPE html>
-<html manifest="manifest.cache">
+<html manifest="offline.cache">
 <head>
     <meta charset="UTF-8">
-    <title>إسحاق هوست - حفظ الملفات</title>
-    <style>
-        body {
-            background: #000c1f url('cache_pbb.png') no-repeat center center fixed;
-            background-color: #1a1a1a;
-            color: white;
-            font-family: sans-serif;
-            text-align: center;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            height: 100vh;
-            margin: 0;
-        }
-        .box {
-            border: 2px solid #00ffcc;
-            padding: 30px;
-            border-radius: 15px;
-            background: #222;
-            box-shadow: 0 0 20px rgba(0, 255, 204, 0.2);
-        }
-        h1 { color: #00ffcc; }
-        p { font-size: 18px; }
-    </style>
+    <title>Cache Page</title>
 </head>
 <body>
-
-    <div class="box">
-        <h1 id="status">جاري حفظ الهوست...</h1>
-        <p id="msg">يرجى الانتظار، لا تغلق الصفحة.</p>
-    </div>
-
+    <h1 style="text-align:center;">جاري تحميل الكاش...</h1>
+    
     <script>
+        // السطر الأول: التصحيح اللي قلت عليه
         var cache = window.applicationCache;
 
-        // التصحيح هنا: الأقواس والترتيب
-        cache.addEventListener('cached', function(e) {
-            document.getElementById("status").innerHTML = "تم الحفظ بنجاح!";
-            document.getElementById("msg").innerHTML = "الآن: اخرج من المتصفح، طفي الأنترنت، وعاود ادخل للهوست.";
-        }, false);
-
-        cache.addEventListener('updateready', function(e) {
-            cache.swapCache();
-            location.reload();
-        }, false);
-
-        cache.addEventListener('noupdate', function(e) {
+        // السطر الثاني: تصحيح الـ Event Listener والـ Function
+        cache.addEventListener("cached", function(e) {
+            alert("تم الحفظ! طفي الأنترنت دوكا.");
+            // الرجوع التلقائي
             window.location.href = "index.html";
         }, false);
 
-        cache.addEventListener('error', function(e) {
-            document.getElementById("status").innerHTML = "خطأ في الكاش!";
-            document.getElementById("msg").innerHTML = "تأكد من ملف manifest.cache أو اتصالك بالنت.";
+        // إذا كان الكاش ديجا موجود وما سحقش تحديث
+        cache.addEventListener("noupdate", function(e) {
+            window.location.href = "index.html";
+        }, false);
+
+        // في حالة وجود خطأ
+        cache.addEventListener("error", function(e) {
+            console.log("Error status: " + e);
         }, false);
     </script>
 </body>
