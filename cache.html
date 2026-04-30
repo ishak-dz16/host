@@ -2,121 +2,110 @@
 <html manifest="cache.appcache">
 <head>
     <meta charset="UTF-8">
-    <title>PS4 Cache Installation</title>
+    <title>PS4 Exploit Offline Installer</title>
     <style>
         body {
             background: #000c1f url('cache_pbb.png') no-repeat center center fixed;
             background-color: #1a1a1a;
             color: white;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: Arial, sans-serif;
             text-align: center;
             padding-top: 50px;
         }
-        .container {
+        /* شريط التحميل الخارجي */
+        #progress-wrapper {
             width: 80%;
-            margin: auto;
-        }
-        /* تصميم شريط التحميل */
-        #progress-container {
-            width: 100%;
+            height: 40px;
             background-color: #333;
-            border-radius: 20px;
-            margin: 20px 0;
             border: 2px solid #555;
+            border-radius: 20px;
+            margin: 30px auto;
+            overflow: hidden;
+            position: relative;
         }
+        /* الشريط الملون اللي يتحرك */
         #progress-bar {
             width: 0%;
-            height: 30px;
-            background-color: #3498db;
-            border-radius: 20px;
-            transition: width 0.3s;
+            height: 100%;
+            background-color: #007bff; /* لون أزرق */
+            transition: width 0.2s ease-in-out;
         }
-        #status-text { margin-top: 10px; font-size: 18px; }
-        #percentage { font-size: 24px; font-weight: bold; color: #3498db; }
-        #file-name { color: #888; font-size: 14px; margin-top: 5px; }
-        .instruction {
-            display: none; /* مخفي حتى يخلص الكاش */
-            background: #2c3e50;
+        #percentage {
+            font-size: 30px;
+            font-weight: bold;
+            margin-bottom: 10px;
+            color: #007bff;
+        }
+        .msg-box {
+            display: none;
+            background: #222;
+            border: 2px solid #f1c40f;
             padding: 20px;
-            border-radius: 10px;
-            border: 1px solid #3498db;
-            margin-top: 20px;
+            width: 80%;
+            margin: 20px auto;
+            border-radius: 15px;
         }
     </style>
 </head>
 <body>
 
-    <div class="container">
-        <img src="your-image.jpg" alt="PS4 Exploit" style="max-width:200px; border-radius:10px;">
-        
-        <h1>جاري تثبيت الكاش للاوفلاين</h1>
-        
-        <div id="percentage">0%</div>
-        
-        <div id="progress-container">
-            <div id="progress-bar"></div>
-        </div>
+    <div id="percentage">0%</div>
 
-        <div id="status-text">يرجى الانتظار...</div>
-        <div id="file-name">جاري فحص الملفات...</div>
+    <div id="progress-wrapper">
+        <div id="progress-bar"></div>
+    </div>
 
-        <div id="instruction-box" class="instruction">
-            <h2 style="color: #f1c40f;">تم الكاش بنجاح!</h2>
-            <p>من فضلك اطفئ الانترنت على جهاز PS4، ثم أعد تشغيل المتصفح.</p>
-            <p>سيتم توجيهك للصفحة الرئيسية الآن...</p>
-        </div>
+    <div id="status">جاري فحص ملفات الكاش...</div>
+
+    <div id="msg-box" class="msg-box">
+        <h2 style="color: #f1c40f;">اكتمل التحميل 100%</h2>
+        <p>من فضلك اطفئ الانترنت على جهاز PS4 الآن.</p>
+        <p>أعد تشغيل المتصفح، سيتم توجيهك للصفحة الرئيسية...</p>
     </div>
 
     <script>
         var cache = window.applicationCache;
         var bar = document.getElementById('progress-bar');
-        var percent = document.getElementById('percentage');
-        var statusTxt = document.getElementById('status-text');
-        var fileName = document.getElementById('file-name');
-        var instructionBox = document.getElementById('instruction-box');
+        var pct = document.getElementById('percentage');
+        var statusTxt = document.getElementById('status');
+        var msgBox = document.getElementById('msg-box');
 
-        // حساب التقدم
+        // تحديث النسبة المئوية والشريط مع كل ملف يتحمل
         cache.addEventListener('progress', function(e) {
             if (e.lengthComputable) {
-                var p = Math.round((e.loaded / e.total) * 100);
-                bar.style.width = p + '%';
-                percent.innerHTML = p + '%';
-                statusTxt.innerHTML = "جاري تحميل الملفات...";
-                // ملاحظة: المتصفح ما يعطيكش اسم الملف مباشرة، بصح يبين التقدم
-                fileName.innerHTML = "تحميل ملف " + e.loaded + " من أصل " + e.total;
+                var progress = Math.round((e.loaded / e.total) * 100);
+                bar.style.width = progress + '%';
+                pct.innerHTML = progress + '%';
+                statusTxt.innerHTML = "تحميل الملفات: " + e.loaded + " / " + e.total;
             }
         }, false);
 
-        // كي يخلص الكاش 100%
+        // كي يخلص الكاش كامل
         cache.addEventListener('cached', function() {
-            finishAction();
+            done();
         }, false);
 
         cache.addEventListener('noupdate', function() {
-            finishAction();
+            done();
         }, false);
 
-        function finishAction() {
+        function done() {
             bar.style.width = '100%';
-            percent.innerHTML = '100%';
-            statusTxt.innerHTML = "اكتملت العملية!";
-            fileName.innerHTML = "";
-            
-            // إظهار الميساج تاعك
-            instructionBox.style.display = "block";
+            pct.innerHTML = '100%';
+            statusTxt.style.display = 'none';
+            msgBox.style.display = 'block';
 
-            // الرجوع أوتوماتيكياً للصفحة الرئيسية بعد 5 ثواني
+            // يرجعك للصفحة الرئيسية أوتوماتيك بعد 6 ثواني (باش تلحق تقرا الميساج)
             setTimeout(function(){
                 window.location.href = "index.html";
-            }, 5000); 
+            }, 6000);
         }
 
-        // في حالة وجود خطأ
+        // معالجة الأخطاء باش ما يتبلوكاوش الناس
         cache.addEventListener('error', function() {
-            statusTxt.innerHTML = "حدث خطأ أو الملفات موجودة مسبقاً.";
-            setTimeout(function(){ window.location.href = "index.html"; }, 3000);
+            statusTxt.innerHTML = "الملفات موجودة مسبقاً أو حدث خطأ بسيط.";
+            setTimeout(function(){ window.location.href = "index.html"; }, 4000);
         }, false);
-
     </script>
 </body>
 </html>
