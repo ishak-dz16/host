@@ -2,95 +2,57 @@
 <html manifest="manifest.cache">
 <head>
     <meta charset="UTF-8">
-    <title>إسحاق هوست - جاري الحفظ</title>
+    <title>إسحاق هوست - حفظ الملفات</title>
     <style>
         body {
-            background: #000c1f url('cache_pbb.png') no-repeat center center fixed;
             background-color: #1a1a1a;
             color: white;
             font-family: sans-serif;
+            text-align: center;
             display: flex;
-            flex-direction: column;
             align-items: center;
             justify-content: center;
             height: 100vh;
             margin: 0;
         }
-        .container {
-            width: 80%;
-            text-align: center;
-        }
-        /* تصميم شريط التقدم */
-        .progress-bg {
-            background-color: #333;
-            border-radius: 20px;
-            padding: 5px;
-            margin-top: 20px;
-            border: 2px solid #555;
-        }
-        .progress-bar {
-            width: 0%;
-            height: 25px;
-            background-color: #00ffcc; /* لون الشريط */
+        .box {
+            border: 2px solid #00ffcc;
+            padding: 30px;
             border-radius: 15px;
-            transition: width 0.3s ease;
+            background: #222;
         }
-        #status {
-            font-size: 20px;
-            margin-bottom: 10px;
-        }
+        h1 { color: #00ffcc; }
     </style>
 </head>
 <body>
 
-    <div class="container">
-        <h2 id="status">جاري تحضير الهوست...</h2>
-        <div class="progress-bg">
-            <div id="progress" class="progress-bar"></div>
-        </div>
-        <p id="percentage">0%</p>
+    <div class="box">
+        <h1 id="status">جاري حفظ الملفات...</h1>
+        <p id="msg">يرجى الانتظار قليلاً</p>
     </div>
 
     <script>
         var cache = window.applicationCache;
-        var statusMsg = document.getElementById("status");
-        var progress = document.getElementById("progress");
-        var percentage = document.getElementById("percentage");
 
-        function updateProgress(e) {
-            if (e.lengthComputable) {
-                var percent = Math.round((e.loaded / e.total) * 100);
-                progress.style.width = percent + "%";
-                percentage.innerHTML = percent + "%";
-                statusMsg.innerHTML = "جاري تحميل الملفات: " + e.loaded + " من " + e.total;
-            }
-        }
-
-        cache.addEventListener('downloading', function() {
-            statusMsg.innerHTML = "بدء تحميل الهوست للاستخدام أوفلاين...";
+        cache.addEventListener('cached', function() {
+            document.getElementById("status").innerHTML = "تم الحفظ بنجاح!";
+            document.getElementById("msg").innerHTML = "الآن اخرج من المتصفح، اقطع الإنترنت، ثم عد للدخول مجدداً.";
+            // هنا الكود يحبس باش يخليك نتا تخرج وتطفي النت براحتك
         }, false);
-
-        cache.addEventListener('progress', updateProgress, false);
 
         cache.addEventListener('updateready', function() {
             cache.swapCache();
-            statusMsg.innerHTML = "تم التحديث! جاري الانتقال...";
-            setTimeout(function(){ window.location.href = "index.html"; }, 2000);
-        }, false);
-
-        cache.addEventListener('cached', function() {
-            statusMsg.innerHTML = "تم الحفظ بنجاح! يمكنك الآن قطع الإنترنت.";
-            progress.style.width = "100%";
-            percentage.innerHTML = "100%";
-            setTimeout(function(){ window.location.href = "index.html"; }, 2500);
-        }, false);
-
-        cache.addEventListener('error', function() {
-            statusMsg.innerHTML = "خطأ في التحميل! تأكد من ملف المانيفست.";
+            location.reload();
         }, false);
 
         cache.addEventListener('noupdate', function() {
+            // إذا الملفات محفوظة ديجا، يديك ديريكت للصفحة الرئيسية
             window.location.href = "index.html";
+        }, false);
+
+        cache.addEventListener('error', function() {
+            document.getElementById("status").innerHTML = "حدث خطأ!";
+            document.getElementById("msg").innerHTML = "تأكد من ملف المانيفست والأنترنت.";
         }, false);
     </script>
 </body>
